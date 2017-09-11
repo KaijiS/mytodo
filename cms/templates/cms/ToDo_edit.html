@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load bootstrap %}
+
+{% block title %}ToDoの編集{% endblock title %}
+
+{% block content %}
+    <br>
+    <!-- <h3 class="page-header">ToDo編集</h3> -->
+    <form action="{% url 'cms:todo_mod' todolist_id=todolist_id todo_id=todo_id %}" method="post" class="form-horizontal" role="form">
+      {% csrf_token %}
+      <!-- {{ form|bootstrap_horizontal }} -->
+      ToDo名を編集する<br>
+      ToDo名 <label class="col-sm-8">{{ form.todo_name}}</label><br>
+      　期限　<label class="col-sm-8">{{ form.deadline}}</label>
+      <button type="submit" class="btn btn-primary btn-lg">確認</button>
+    </form>
+    {% if messages != None%}
+    <font color="red">{{ messages }}</font><br><br>
+    {% else %}
+    <br><br>
+    {% endif %}
+    <a href="{% url 'cms:todo_list' todolist_id=todolist_id %}" class="btn btn-default btn-sm">戻る</a>
+
+{% endblock content %}

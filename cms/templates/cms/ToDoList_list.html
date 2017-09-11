@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}ToDoリスト{% endblock title %}
+
+{% block extrahead %}
+<style>
+table {
+  margin-top: 8px;
+}
+div.list{
+  display: inline-block;
+}
+</style>
+{% load bootstrap %}
+{% block addhead %}{% endblock %}
+{% endblock %}
+
+{% block content %}
+    <br>
+    <form action="{% url 'cms:todolist_list' %}" method="post" class="form-horizontal" role="form">
+      {% csrf_token %}
+      <!-- {{ form|bootstrap_horizontal }} -->
+      新しいToDoリストを作成する<br>
+      <label class="col-sm-8">
+      {{ form.todolist_name}}
+      </label>
+      <button type="submit" class="btn btn-primary ">リストの作成</button>
+
+    </form>
+
+    {% if messages_error != None %}
+    <font color="red">{{ messages_error }}</font>
+    {% endif %}
+    <Hr Color="#000">
+    {% if messages_success != None %}
+    <font color="black"><b>{{ messages_success }}</b></font><br><br>
+    {% endif %}
+    {% include "cms/ToDoList_list2.html" %}
+{% endblock content %}

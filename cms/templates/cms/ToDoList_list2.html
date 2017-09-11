@@ -1,0 +1,63 @@
+<div class="list">
+  <table style=”text-align:right;”>
+    <thead>
+      <tr>
+        <th bgcolor="#AFF"> 3日前 </th><th>　</th>
+        <th bgcolor="#FF7"> 1日前 </th><th>　</th>
+        <th bgcolor="#F55"> 今日 </th><th>　</th>
+        <th bgcolor="#FBF"> 過ぎています </th>
+      </tr>
+    </thead>
+  </table>
+</div>
+<br>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <!-- <td> </td> -->
+      <th></th>
+      <th>ToDoリスト名</th>
+      <!-- <th>書籍名</th>
+      <th>出版社</th>
+      <th>ページ数</th> -->
+      <th colspan="2">操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% load mytag %}
+    {% for todolist_part in todolists %}
+    <tr>
+      {% if time_between|show_list:forloop.counter0 < 0 %}
+        <td bgcolor="#FBF">
+      {% elif time_between|show_list:forloop.counter0 == 0  %}
+        <td bgcolor="#F55">
+      {% elif time_between|show_list:forloop.counter0 == 1  %}
+        <td bgcolor="#FF7">
+      {% elif time_between|show_list:forloop.counter0 <= 3  %}
+        <td bgcolor="#AFF">
+      {% else %}
+        <td>
+      {% endif %}
+      </td>
+      <td>
+        <a href="{% url 'cms:todo_list' todolist_id=todolist_part.id %}" class="btn btn-link btn-lg"><font size="5">{{ todolist_part.todolist_name }}</font></a><br>
+        {% if todo_count|show_list:forloop.counter0 > 0 %}
+          {{ todo_count|show_list:forloop.counter0 }} 個中 {{ check_count|show_list:forloop.counter0 }} 個が チェック済み<br>
+          ~{{ near_dead|show_list:forloop.counter0  }}
+        {% else %}
+          ToDoがありません
+        {% endif %}
+      </td>
+      <!-- <td>{{ book.name }}</td>
+      <td>{{ book.publisher }}</td>
+      <td>{{ book.page }}</td> -->
+      <td align="center" valign="middle">
+        <a href="{% url 'cms:todolist_mod' todolist_id=todolist_part.id %}" class="btn btn-info btn-lg" >修正</a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="{% url 'cms:todolist_del' todolist_id=todolist_part.id %}" class="btn btn-danger btn-lg">削除</a>
+        <!-- <a href="{% url 'cms:todo_list' todolist_id=todolist_part.id %}" class="btn btn-default btn-sm btn-primary">ToDoの一覧</a> -->
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

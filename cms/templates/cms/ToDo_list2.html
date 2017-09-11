@@ -1,0 +1,84 @@
+<div class="list">
+  <table>
+    <thead>
+      <tr>
+        <th bgcolor="#AFF"> 3日前 </th><th>　</th>
+        <th bgcolor="#FF7"> 1日前 </th><th>　</th>
+        <th bgcolor="#F55"> 今日 </th><th>　</th>
+        <th bgcolor="#FBF"> 過ぎています </th>
+      </tr>
+    </thead>
+  </table>
+</div>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>ToDo名</th>
+      <th>期限</th>
+      <th>作成日</th>
+      <th>完了/末完了</th>
+      <th colspan="2">操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for todo in todos %}
+      {% load mytag %}
+      {% if time_between|show_list:forloop.counter0 == 1 and not todo.comp%}
+        <tr bgcolor="#FF7">
+      {% elif time_between|show_list:forloop.counter0 == 0 and not todo.comp%}
+        <tr bgcolor="#F55">
+      {% elif time_between|show_list:forloop.counter0 < 0 and not todo.comp%}
+        <tr bgcolor="#FBF">
+      {% elif time_between|show_list:forloop.counter0 <= 3 and not todo.comp%}
+        <tr bgcolor="#AFF">
+      {% else %}
+        <tr>
+      {% endif %}
+        <td><font size="5">{{ todo.todo_name }}</font></td>
+        <td><font size="4">{{ todo.deadline|linebreaksbr }}</font></td>
+        <td><font size="4">{{ todo.created_time|linebreaksbr }}</font></td>
+        {% if todo.comp %}
+          <!-- <td><button class="btn btn-default btn-sm" pk="{{ todo.id }}" url="{% url 'cms:comp_change' todolist_id=todolist.id todo_id=todo.id %}">{{ todo.comp|linebreaksbr }}</button></td> -->
+          <td><a href="{% url 'cms:comp_change' todolist_id=todolist.id todo_id=todo.id %}" class="btn btn-success btn-sm btn-block">完了</a></td>
+        {% else %}
+          <!-- <td><button class="btn btn-primary btn-sm">{{ todo.comp|linebreaksbr }}</button></td> -->
+          <td><a href="{% url 'cms:comp_change' todolist_id=todolist.id todo_id=todo.id %}" class="btn btn-primary btn-sm btn-block">未完了</a></td>
+        {% endif %}
+        <td>
+          <a href="{% url 'cms:todo_mod' todolist_id=todolist.id todo_id=todo.id %}" class="btn btn-info btn-sm">修正</a>
+        </td>
+        <td>
+          <!-- <button class="btn btn-danger btn-sm del_confirm" data-toggle="modal" data-target="#deleteModal" pk="{{ todo.id }}" url="{% url 'cms:todo_del' todolist_id=todolist.id todo_id=todo.id %}">削除</button> -->
+          <a href="{% url 'cms:todo_del' todolist_id=todolist.id todo_id=todo.id %}"class="btn btn-danger btn-sm del_confirm">削除</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% if c_count == 0 %}
+  <font color="red">登録されたToDoはございません</font><br><br>
+{% endif %}
+
+<div>
+  <a href="{% url 'cms:todolist_list' %}" class="btn btn-default btn-sm">戻る</a>
+</div>
+
+{# 削除を確認するモーダル ダイアログ #}
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h4 class="modal-title" id="deleteModalLabel">確認</h4>
+    </div>
+    <div class="modal-body">
+      <p>ID: <span id="del_pk"></span> を削除しますか？</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="btn btn-primary" id="del_url">OK</a>
+      <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+    </div>
+  </div>
+</div>
+</div>
