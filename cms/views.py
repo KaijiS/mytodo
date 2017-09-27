@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
-from django.views.generic.list import ListView
+from django.http import JsonResponse
 
 from cms.models import ToDoList, ToDo
 from cms.forms import ToDoListForm, ToDoForm, SerachForm
@@ -178,7 +178,6 @@ def ToDo_edit(request, todolist_id, todo_id):
     """ToDoの編集"""
     todolist = get_object_or_404(ToDoList, pk=todolist_id)  # 親の書籍を読む
     todo = get_object_or_404(ToDo, pk=todo_id)
-    print(todo_id)
     messages = None
     if request.method == 'POST':
         form = ToDoForm(request.POST, instance=todo)  # POST された request データからフォームを作成
@@ -231,6 +230,41 @@ def Comp_change(request, todolist_id, todo_id):
 
 
 def Search(request):
-    form = SerachForm()
-    return render(request,'cms/Search.html',{"form":form})
-    # return HttpResponse('検索画面の予定')
+    # form = SerachForm()
+    #
+    if request.is_ajax():
+        print("sss")
+    else:
+        print("nnn")
+    if request.method == 'GET':
+        query = request.GET.get('query')
+        if query:
+            word_todo = [i.todo_name for i in ToDo.objects.filter(todo_name__icontains=query).order_by('-created_time')]
+            word_todo_id = [i.id for i in ToDo.objects.filter(todo_name__icontains=query).order_by('-created_time')]
+            word_todo_todolist = [j.todolist_name for j in (i.todolist for i in ToDo.objects.filter(todo_name__icontains=query).order_by('-created_time'))]
+            word_todo_todolist_id = [j.id for j in (i.todolist for i in ToDo.objects.filter(todo_name__icontains=query).order_by('-created_time'))]
+            word_deadline = [i.deadline for i in ToDo.objects.filter(todo_name__icontains=query).order_by('-created_time')]
+            word_created_time = [i.created_time for i in ToDo.objects.filter(todo_name__icontains=query).order_by('-created_time')]
+            word_todolist = [i.todolist_name for i in ToDoList.objects.filter(todolist_name__icontains=query).annotate(latest_day=Max('todos__created_time')).order_by('-latest_day')]
+            word_todolist_id = [i.id for i in ToDoList.objects.filter(todolist_name__icontains=query).annotate(latest_day=Max('todos__created_time')).order_by('-latest_day')]
+            word_todolist_created = [i.latest_day for i in ToDoList.objects.filter(todolist_name__icontains=query).annotate(latest_day=Max('todos__created_time')).order_by('-latest_day')]
+            for i in range(len(word_todolist_created)):
+                if word_todolist_created[i] == None:
+                    word_todolist_created[i] = "ToDoがありません"
+            word_todolist_id = [ str(x) for x in word_todolist_id]
+            d = {
+                'word_todo':word_todo,
+                'word_todo_id':word_todo_id,
+                'word_todo_todolist':word_todo_todolist,
+                'word_todo_todolist_id':word_todo_todolist_id,
+                'num_word_todolist':str(len(word_todolist)),
+                'num_word_todo':str(len(word_todo)),
+                'word_deadline':word_deadline,
+                'word_created_time':word_created_time,
+                'word_todolist':word_todolist,
+                'word_todolist_id':word_todolist_id,
+                'word_todolist_created':word_todolist_created,
+            }
+            return JsonResponse(d)
+
+    return render(request, 'cms/Search.html')

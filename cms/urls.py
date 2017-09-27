@@ -14,5 +14,8 @@ urlpatterns = [
     url(r'^ToDo/change/(?P<todolist_id>\d+)/(?P<todo_id>\d+)/$', views.Comp_change, name='comp_change'),   #完了/未完了反転
 
     # 検索
-    url(r'^Search/$', views.Search, name='search'),   # 一覧
+    # url(r'^$', PostList.as_view(), name='post_list'),
+    # url(r'^Search/$', SerachForm, name='search'),   # 一覧
+
+    url(r'^Search/$', views.Search, name='search'),
 ]

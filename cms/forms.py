@@ -9,7 +9,7 @@ class ToDoListForm(ModelForm):
         model = ToDoList
         fields = ('todolist_name',)
         widgets = {
-            'todolist_name': forms.TextInput(attrs={'size':'60','placeholder':'リスト名を入力してください'})
+            'todolist_name': forms.TextInput(attrs={'placeholder':'リスト名を入力してください'})
         }
 
 
