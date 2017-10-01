@@ -5,7 +5,6 @@
 
 {% block content %}
     <br>
-    <!-- <h3 class="page-header">ToDo編集</h3> -->
     <form action="{% url 'cms:todo_mod' todolist_id=todolist_id todo_id=todo_id %}" method="post" class="form-horizontal" role="form">
       {% csrf_token %}
       <!-- {{ form|bootstrap_horizontal }} -->
@@ -15,7 +14,7 @@
       <button type="submit" class="btn btn-primary btn-lg">確認</button>
     </form>
     {% if messages != None%}
-    <font color="red">{{ messages }}</font><br><br>
+      <font color="red">{{ messages }}</font><br><br>
     {% else %}
     <br><br>
     {% endif %}

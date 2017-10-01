@@ -23,7 +23,13 @@ div.list{
 {% endblock %}
 
 {% block content %}
-  <h3 class="page-header">{{ todolist.todolist_name }}</h3><br>
+  <h3 class="page-header">
+    <div style="background-color:#ffcc99">
+      {{ todolist.todolist_name }}
+    </div>
+  </h3>
+  <br>
+
   <form action="{% url 'cms:todo_list' todolist_id=todolist.id %}" method="post" class="form-horizontal" role="form">
     {% csrf_token %}
     <!-- {{ form|bootstrap_horizontal }} -->
@@ -33,11 +39,11 @@ div.list{
     <button type="submit" class="btn btn-primary btn-lg">ToDoの追加</button>
   </form>
   {% if messages_error != None %}
-  <font color="red">{{ messages_error }}</font>
+    <font color="red">{{ messages_error }}</font>
   {% endif %}
   <Hr Color="#000">
   {% if messages_success != None %}
-  <font color="black"><b>{{ messages_success }}</b></font><br><br>
+    <font color="black"><b>{{ messages_success }}</b></font><br><br>
   {% endif %}
   {% include "cms/ToDo_list2.html"  %}
 

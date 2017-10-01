@@ -38,18 +38,16 @@
         <td><font size="4">{{ todo.deadline|linebreaksbr }}</font></td>
         <td><font size="4">{{ todo.created_time|linebreaksbr }}</font></td>
         {% if todo.comp %}
-          <!-- <td><button class="btn btn-default btn-sm" pk="{{ todo.id }}" url="{% url 'cms:comp_change' todolist_id=todolist.id todo_id=todo.id %}">{{ todo.comp|linebreaksbr }}</button></td> -->
           <td><a href="{% url 'cms:comp_change' todolist_id=todolist.id todo_id=todo.id %}" class="btn btn-success btn-sm btn-block">完了</a></td>
         {% else %}
-          <!-- <td><button class="btn btn-primary btn-sm">{{ todo.comp|linebreaksbr }}</button></td> -->
           <td><a href="{% url 'cms:comp_change' todolist_id=todolist.id todo_id=todo.id %}" class="btn btn-primary btn-sm btn-block">未完了</a></td>
         {% endif %}
         <td width="100">
           <a href="{% url 'cms:todo_mod' todolist_id=todolist.id todo_id=todo.id %}" class="btn btn-info btn-sm btn-block">修正</a>
         </td>
         <td width="80">
-          <button class="btn btn-danger btn-sm btn-block del_confirm" data-toggle="modal" data-target="#deleteModal" pk="{{ todo.id }}" url="{% url 'cms:todo_del' todolist_id=todolist.id todo_id=todo.id %}">削除</button>
-          <!-- <a href="{% url 'cms:todo_del' todolist_id=todolist.id todo_id=todo.id %}"class="btn btn-danger btn-sm btn-block del_confirm">削除</a> -->
+          <!-- <button class="btn btn-danger btn-sm btn-block del_confirm" data-toggle="modal" data-target="#deleteModal" pk="{{ todo.id }}" url="{% url 'cms:todo_del' todolist_id=todolist.id todo_id=todo.id %}">削除</button> -->
+          <a href="{% url 'cms:todo_del' todolist_id=todolist.id todo_id=todo.id %}"class="btn btn-danger btn-sm btn-block del_confirm">削除</a>
         </td>
       </tr>
     {% endfor %}

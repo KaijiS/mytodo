@@ -13,7 +13,12 @@
 </head>
 <body>
 
-  <h1 style= background-color:#5AF padding: 10px><a href="{% url 'cms:todolist_list' %}" style= color:#222>　ToDoリスト</a><a href="{% url 'cms:search' %}" class="btn btn-default" style=float:right>検索</a></h1>
+  <h1 style= background-color:#5AF padding: 10px>
+    <a href="{% url 'cms:todolist_list' %}" style= "color:#222; padding-left: 50px;">ToDoリスト</a>
+    <div style="float:right; padding-right:50px; width: 180px;">
+      <a href="{% url 'cms:search' %}" class="btn btn-success btn-block" style=float:right>検索</a>
+    </div>
+  </h1>
 
   <div class="container">
     {% block content %}
