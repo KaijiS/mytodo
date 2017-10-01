@@ -44,12 +44,12 @@
           <!-- <td><button class="btn btn-primary btn-sm">{{ todo.comp|linebreaksbr }}</button></td> -->
           <td><a href="{% url 'cms:comp_change' todolist_id=todolist.id todo_id=todo.id %}" class="btn btn-primary btn-sm btn-block">未完了</a></td>
         {% endif %}
-        <td>
-          <a href="{% url 'cms:todo_mod' todolist_id=todolist.id todo_id=todo.id %}" class="btn btn-info btn-sm">修正</a>
+        <td width="100">
+          <a href="{% url 'cms:todo_mod' todolist_id=todolist.id todo_id=todo.id %}" class="btn btn-info btn-sm btn-block">修正</a>
         </td>
-        <td>
-          <!-- <button class="btn btn-danger btn-sm del_confirm" data-toggle="modal" data-target="#deleteModal" pk="{{ todo.id }}" url="{% url 'cms:todo_del' todolist_id=todolist.id todo_id=todo.id %}">削除</button> -->
-          <a href="{% url 'cms:todo_del' todolist_id=todolist.id todo_id=todo.id %}"class="btn btn-danger btn-sm del_confirm">削除</a>
+        <td width="80">
+          <button class="btn btn-danger btn-sm btn-block del_confirm" data-toggle="modal" data-target="#deleteModal" pk="{{ todo.id }}" url="{% url 'cms:todo_del' todolist_id=todolist.id todo_id=todo.id %}">削除</button>
+          <!-- <a href="{% url 'cms:todo_del' todolist_id=todolist.id todo_id=todo.id %}"class="btn btn-danger btn-sm btn-block del_confirm">削除</a> -->
         </td>
       </tr>
     {% endfor %}
@@ -64,7 +64,7 @@
   <a href="{% url 'cms:todolist_list' %}" class="btn btn-default btn-sm">ToDoリストへ</a>
 </div>
 
-{# 削除を確認するモーダル ダイアログ #}
+<!-- {# 削除を確認するモーダル ダイアログ #} -->
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
 <div class="modal-dialog">
   <div class="modal-content">
