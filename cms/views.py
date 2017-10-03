@@ -11,7 +11,6 @@ import datetime
 
 def ToDoList_list(request):
     """ToDoリストの一覧"""
-    # return HttpResponse('ToDoリストの一覧')
     form = ToDoListForm(request.POST or None)
     messages_error = None
     messages_success = None
@@ -35,29 +34,30 @@ def ToDoList_list(request):
                 messages_success = "新しいToDoリストが作成されました"
                 # return redirect('cms:todolist_list')
 
-    todolists = ToDoList.objects.annotate(latest_day=Max('todos__created_time')).order_by('-latest_day')
+    todolists = ToDoList.objects.annotate(latest_day=Max('todos__created_time')).order_by('-latest_day') # ToDoリストに登録されているToDoの作成日が新しい順にソート
     todo_count = []
     check_count = []
     near_dead = []
     now = datetime.datetime.now()
     now_date = datetime.date(now.year, now.month, now.day)
     time_between = []
+    # ソートされたToDoリストに関して、順に処理を行う
     for i in todolists:
-        tmp = ToDoList.objects.filter(todolist_name=i.todolist_name).annotate(c_todo=Count('todos__todo_name'))
+        tmp = ToDoList.objects.filter(todolist_name=i.todolist_name).annotate(c_todo=Count('todos__todo_name'))# そのToDoリストが親となるToDoの個数をカウント
         todo_count += [tmp[0].c_todo]
 
-        tmp = ToDoList.objects.filter(todolist_name=i.todolist_name,todos__comp=True).annotate(c_check=Count('todos__todo_name'))
+        tmp = ToDoList.objects.filter(todolist_name=i.todolist_name,todos__comp=True).annotate(c_check=Count('todos__todo_name'))# そのToDoリストが親となるToDoの内,完了した個数をカウント
         if tmp:
             check_count += [tmp[0].c_check]
         else:
             check_count += [0]
 
-        tmp = ToDoList.objects.filter(todolist_name=i.todolist_name,todos__comp=False).annotate(near_day=Min('todos__deadline'))
+        tmp = ToDoList.objects.filter(todolist_name=i.todolist_name,todos__comp=False).annotate(near_day=Min('todos__deadline'))# そのToDoリストが親となるToDoの内,最も締め切りが近い日(完了したものは含まない)
         if tmp:
             near_dead += [tmp[0].near_day]
             time_between += [int((tmp[0].near_day - now_date).days)]
         else:
-            near_dead += ['全て完了']
+            near_dead += ['全て完了'] # 締め切りが近い日が1つも格納されていなければ「全て完了」、ToDoが0個でも同様に処理しtemplateのhtmlで再処理を行う
             time_between += [None]
 
 
@@ -76,10 +76,7 @@ def ToDoList_list(request):
 
 def ToDoList_edit(request, todolist_id):
     """ToDoリストの編集"""
-    # return HttpResponse('ToDoリストの編集')
     todolist = get_object_or_404(ToDoList, pk=todolist_id)
-
-
     messages = None
     if request.method == 'POST':
         form = ToDoListForm(request.POST, instance=todolist)  # POST された request データからフォームを作成
@@ -112,7 +109,6 @@ def ToDoList_edit(request, todolist_id):
 
 def ToDoList_del(request, todolist_id):
     """ToDoリストの削除"""
-    # return HttpResponse('ToDoリストの削除')
     todolist = get_object_or_404(ToDoList, pk=todolist_id)
     todolist.delete()
     return redirect('cms:todolist_list')
@@ -121,8 +117,7 @@ def ToDoList_del(request, todolist_id):
 
 def ToDo_list(request, todolist_id,):
     """ToDoの一覧"""
-    # return HttpResponse('ToDoリストの一覧')
-    todolist = get_object_or_404(ToDoList, pk=todolist_id)  # 親の書籍を読む
+    todolist = get_object_or_404(ToDoList, pk=todolist_id)  # 親のToDoリストを読む
     form = ToDoForm(request.POST or None)
     messages_error = None
     messages_success = None
@@ -148,15 +143,14 @@ def ToDo_list(request, todolist_id,):
                 messages_success = "新しいToDoが作成されました"
                 # return redirect('cms:todo_list', todolist_id=todolist_id)
 
-    todos = todolist.todos.all().order_by('-created_time')   # ToDoListの子供の、ToDoを読む
-    check_todo = ToDoList.objects.filter(todolist_name=todolist).annotate(todo_count=Count('todos__todo_name'))
+    todos = todolist.todos.all().order_by('-created_time')   # ToDoリストの子供の、ToDoを読む
+    check_todo = ToDoList.objects.filter(todolist_name=todolist).annotate(todo_count=Count('todos__todo_name')) #ToDoの数をカウント
 
     now = datetime.datetime.now()
     now_date = datetime.date(now.year, now.month, now.day)
     time_between = []
     for i in todos:
         time_between += [int((i.deadline - now_date).days)]
-
 
     contexts = {
         'form':form,
@@ -171,12 +165,9 @@ def ToDo_list(request, todolist_id,):
     return render(request,'cms/ToDo_list.html',contexts)
 
 
-
-
-
 def ToDo_edit(request, todolist_id, todo_id):
     """ToDoの編集"""
-    todolist = get_object_or_404(ToDoList, pk=todolist_id)  # 親の書籍を読む
+    todolist = get_object_or_404(ToDoList, pk=todolist_id)  # 親のToDoリストを読む
     todo = get_object_or_404(ToDo, pk=todo_id)
     messages = None
     if request.method == 'POST':
@@ -201,14 +192,13 @@ def ToDo_edit(request, todolist_id, todo_id):
             if flag == 0:
                 todo= form.save(commit=False)
                 todo.todolist = todolist  # このToDoの、親のToDoリストをセット
-                todo.save() #とりあえず更新
+                todo.save()
                 return redirect('cms:todo_list', todolist_id=todolist_id)
 
     else:    # GET の時
         form = ToDoForm(instance=todo)  # todo インスタンスからフォームを作成
 
     return render(request,'cms/ToDo_edit.html',dict(form=form, todolist_id=todolist_id, todo_id=todo_id, messages=messages))
-
 
 
 def ToDo_del(request, todolist_id, todo_id):
@@ -219,7 +209,8 @@ def ToDo_del(request, todolist_id, todo_id):
 
 
 def Comp_change(request, todolist_id, todo_id):
-    todolist = get_object_or_404(ToDoList, pk=todolist_id)  # 親の書籍を読む
+    """ToDoの完了/未完了の切り替え"""
+    todolist = get_object_or_404(ToDoList, pk=todolist_id)  # 親のToDoリストを読む
     todo = get_object_or_404(ToDo, pk=todo_id)
     if todo.comp:
         todo.comp = False
@@ -230,24 +221,23 @@ def Comp_change(request, todolist_id, todo_id):
 
 
 def Search(request):
-    # form = SerachForm()
-    #
+    """検索"""
     if request.is_ajax():
         print("sss")
     else:
         print("nnn")
     if request.method == 'GET':
-        query = request.GET.get('query')
+        query = request.GET.get('query') #検索ワード：query
         if query:
-            word_todo = [i.todo_name for i in ToDo.objects.filter(todo_name__icontains=query).order_by('-created_time')]
-            word_todo_id = [i.id for i in ToDo.objects.filter(todo_name__icontains=query).order_by('-created_time')]
-            word_todo_todolist = [j.todolist_name for j in (i.todolist for i in ToDo.objects.filter(todo_name__icontains=query).order_by('-created_time'))]
-            word_todo_todolist_id = [j.id for j in (i.todolist for i in ToDo.objects.filter(todo_name__icontains=query).order_by('-created_time'))]
-            word_deadline = [i.deadline for i in ToDo.objects.filter(todo_name__icontains=query).order_by('-created_time')]
-            word_created_time = [i.created_time for i in ToDo.objects.filter(todo_name__icontains=query).order_by('-created_time')]
-            word_todolist = [i.todolist_name for i in ToDoList.objects.filter(todolist_name__icontains=query).annotate(latest_day=Max('todos__created_time')).order_by('-latest_day')]
-            word_todolist_id = [i.id for i in ToDoList.objects.filter(todolist_name__icontains=query).annotate(latest_day=Max('todos__created_time')).order_by('-latest_day')]
-            word_todolist_created = [i.latest_day for i in ToDoList.objects.filter(todolist_name__icontains=query).annotate(latest_day=Max('todos__created_time')).order_by('-latest_day')]
+            word_todo = [i.todo_name for i in ToDo.objects.filter(todo_name__icontains=query).order_by('-created_time')] #クエリを含むToDo名をそれに対応するToDoの作成日順にソート
+            word_todo_id = [i.id for i in ToDo.objects.filter(todo_name__icontains=query).order_by('-created_time')] #クエリを含むToDoのIDをそれに対応するToDoの作成日順にソート
+            word_todo_todolist = [j.todolist_name for j in (i.todolist for i in ToDo.objects.filter(todo_name__icontains=query).order_by('-created_time'))] #クエリを含むToDoの親ToDoリストをそれに対応するToDoの作成日順にソート
+            word_todo_todolist_id = [j.id for j in (i.todolist for i in ToDo.objects.filter(todo_name__icontains=query).order_by('-created_time'))] #クエリを含むToDoの親ToDoリストIDをそれに対応するToDoの作成日順にソート
+            word_deadline = [i.deadline for i in ToDo.objects.filter(todo_name__icontains=query).order_by('-created_time')] #クエリを含むToDoの締切日をそれに対応するToDoの作成日順にソート
+            word_created_time = [i.created_time for i in ToDo.objects.filter(todo_name__icontains=query).order_by('-created_time')] #クエリを含むToDoの作成日に関して、作成日順にソート
+            word_todolist = [i.todolist_name for i in ToDoList.objects.filter(todolist_name__icontains=query).annotate(latest_day=Max('todos__created_time')).order_by('-latest_day')] #クエリを含むToDoリスト名をそれに対応するToDoリストの作成日(ToDoリスト内の最も新しい作成日)順にソート
+            word_todolist_id = [i.id for i in ToDoList.objects.filter(todolist_name__icontains=query).annotate(latest_day=Max('todos__created_time')).order_by('-latest_day')] #クエリを含むToDoリストのIDをそれに対応するToDoリストの作成日(ToDoリスト内の最も新しい作成日)順にソート
+            word_todolist_created = [i.latest_day for i in ToDoList.objects.filter(todolist_name__icontains=query).annotate(latest_day=Max('todos__created_time')).order_by('-latest_day')] #クエリを含むToDoリストの作成日(ToDoリスト内の最も新しい作成日)に関して、作成日順にソート
             for i in range(len(word_todolist_created)):
                 if word_todolist_created[i] == None:
                     word_todolist_created[i] = "ToDoがありません"

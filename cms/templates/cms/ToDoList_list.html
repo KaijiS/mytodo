@@ -17,13 +17,17 @@ div.list{
 
 {% block content %}
     <br>
+    <!-- <div style="background-color:#ffcc99 padding:10px"> -->
     <form action="{% url 'cms:todolist_list' %}" method="post" class="form-horizontal" role="form">
       {% csrf_token %}
       <!-- {{ form|bootstrap_horizontal }} -->
+      <!-- <div style="background-color:#fc9"> -->
       新しいToDoリストを作成する<br>
       <label class="col-sm-8">{{ form.todolist_name}}</label>
       <button type="submit" class="btn btn-primary ">リストの作成</button>
+      <!-- </div> -->
     </form>
+  <!-- </div> -->
 
     {% if messages_error != None %}
       <font color="red">{{ messages_error }}</font>

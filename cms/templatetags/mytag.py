@@ -3,7 +3,6 @@ import numpy as np
 
 register = template.Library()
 
-# @register.assignment_tag
 @register.filter(name='show_list')
 def show_list(tmp_list,index):
     return tmp_list[index]
