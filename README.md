@@ -7,7 +7,7 @@
 フレームワーク:Django  
 データベース:SQLite(Djangoの初期設定)  
 
-###構成  
+*構成*  
 mytodo(プロジェクト名)  
 　　|-cms(アプリ名)  
 　　|　　|--template(HTMLなど表示周り)  
@@ -17,11 +17,11 @@ mytodo(プロジェクト名)
 　　|  
 　　|-static(BootstrapやjQuery)  
 
-###データベース設計  
+*データベース設計*  
 テーブル名:ToDoList(属性:ID,ToDoリスト名)  
 テーブル名:ToDo(属性:ID,ToDoList(外部キー),ToDo名,締切日,作成日,完了/末完了)  
 
-###動作確認  
+*動作確認*  
 開発用サーバの起動
 `$ python3 manage.py runserver`  
 アクセス先：http://127.0.0.1:8000/cms/ToDoList/
@@ -35,10 +35,10 @@ mytodo(プロジェクト名)
 6. 開発用サーバの起動($ python3 manage.py runserver)(確認アクセス先：http://127.0.0.1:8000/)
 7. アプリケーションの作成($ python3 manage.py startapp アプリ名)
 
-####データベース(model.py)の変更があった時  
+*データベース(model.py)の変更があった時*  
     $ python3 manage.py makemigrations アプリ名  
     $ python3 manage.py sqlmigrate アプリ名 0001  
     $ python3 manage.py migrate  
 
-####HTML周り
+*HTML周り*
 * "Bootstrap"及び"jQuery"をダウンロード
