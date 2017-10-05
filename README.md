@@ -1,12 +1,13 @@
 # mytodo
 プログラム課題
 ## 使用した技術要素
-
-## 全体の設計・構成
 言語:python  
 フレームワーク:Django  
 データベース:SQLite(Djangoの初期設定)  
 
+検索時：jQueryによるAjax
+
+## 全体の設計・構成
 *構成*  
 mytodo(プロジェクト名)  
 　　|-cms(アプリ名)  
