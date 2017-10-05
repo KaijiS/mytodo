@@ -17,7 +17,10 @@ mytodo(プロジェクト名)
 　　|  
 　　|-static(BootstrapやjQuery)  
 
-動作確認アクセス先：http://127.0.0.1:8000/cms/ToDoList/
+動作確認：  
+開発用サーバの起動
+`$ python3 manage.py runserver`  
+アクセス先：http://127.0.0.1:8000/cms/ToDoList/
 
 ## 環境開発のセットアップ手順
 1. python3のインストール
