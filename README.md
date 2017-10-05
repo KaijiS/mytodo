@@ -14,8 +14,8 @@
 7. アプリケーションの作成($ python3 manage.py startapp アプリ名)
 データベース(model.py)の変更があった時
 ・$ python3 manage.py makemigrations アプリ名
-・$ python3 manage.py sqlmigrate アプリ名 0001
+・$ python3 manage.py sqlmigrate アプリ名 0001  
 ・$ python3 manage.py migrate
 
-HTML周り  
+HTML周り
 ・"Bootstrap"及び"jQuery"をダウンロード
