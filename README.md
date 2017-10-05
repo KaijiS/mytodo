@@ -7,13 +7,13 @@
 フレームワーク:Django  
 データベース:SQLite(Djangoの初期設定)  
 mytodo(プロジェクト名)  
-|-cms(アプリ名)  
-| |--template(HTMLなど表示周り)  
-| |--他(内部の実装)  
-|  
-|-mytodo(プロジェクトの設定)  
-|  
-|-static(BootstrapやjQuery)  
+  |-cms(アプリ名)  
+  |   |--template(HTMLなど表示周り)  
+  |   |--他(内部の実装)  
+  |  
+  |-mytodo(プロジェクトの設定)  
+  |  
+  |-static(BootstrapやjQuery)  
 
 ## 環境開発のセットアップ手順
 1. python3のインストール
