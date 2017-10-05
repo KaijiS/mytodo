@@ -17,5 +17,5 @@
 ・$ python3 manage.py sqlmigrate アプリ名 0001
 ・$ python3 manage.py migrate
 
-HTML周り
+HTML周り  
 ・"Bootstrap"及び"jQuery"をダウンロード
