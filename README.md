@@ -7,7 +7,7 @@
 フレームワーク:Django  
 データベース:SQLite(Djangoの初期設定)  
 
-構成:
+構成:  
 mytodo(プロジェクト名)  
 　　|-cms(アプリ名)  
 　　|　　|--template(HTMLなど表示周り)  
