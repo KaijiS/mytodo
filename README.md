@@ -17,6 +17,8 @@ mytodo(プロジェクト名)
 　　|  
 　　|-static(BootstrapやjQuery)  
 
+動作確認アクセス先：http://127.0.0.1:8000/cms/ToDoList/
+
 ## 環境開発のセットアップ手順
 1. python3のインストール
 2. pip3を用いて"numpy"及び"Django"をインストール
