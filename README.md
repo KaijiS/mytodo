@@ -16,7 +16,7 @@ mytodo(プロジェクト名)
 　　|  
 　　|-mytodo(プロジェクトの設定)  
 　　|  
-　　|-static(BootstrapやjQuery)  
+　　|-static(BootstrapやjQuery,背景画像)  
 
 *データベース設計*  
 テーブル名:ToDoList(属性:ID,ToDoリスト名)  
