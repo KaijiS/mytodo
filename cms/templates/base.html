@@ -9,14 +9,28 @@
   <link href="{% static 'css/bootstrap-theme.min.css' %}" rel="stylesheet">
   <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
   <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <style>
+  body {
+    background: url("{% static 'image/document_syorui_pen.png' %}") center center / contain no-repeat fixed;
+  }
+  .bkRGBA{
+    height: 100%;
+    background: rgba(255,255,255,0.9);
+  }
+  </style>
   {% block extrahead %}{% endblock %}
 </head>
+{% block body %}
 <body>
-
+<div class="bkRGBA">
+{% endblock %}
   <h1 style= background-color:#5AF padding: 10px>
     <a href="{% url 'cms:todolist_list' %}" style= "color:#222; padding-left: 50px;">ToDoリスト</a>
     <div style="float:right; padding-right:50px; width: 180px;">
-      <a href="{% url 'cms:search' %}" class="btn btn-success btn-block" style=float:right>検索</a>
+      <a href="{% url 'cms:search' %}" class="btn btn-warning btn-block">検索</a>
+    </div>
+    <div style="float:right; padding-right:30px; width: 230px;">
+      <a href="{% url 'cms:sort' %}" class="btn btn-success btn-block" >締め切りが近いToDo</a>
     </div>
   </h1>
 
@@ -25,6 +39,7 @@
       {{ content }}
     {% endblock %}
   </div>
+</div>
 </body>
 
 {% block scripts %}

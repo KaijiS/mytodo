@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load bootstrap %}
+
+{% block title %}ToDoリストの編集{% endblock title %}
+
+{% block content %}
+  <br><h3><font color="#077">ToDo</font><font size=4 color="#077">　締め切り近い順</font></h3><br>
+  <div class="list">
+    <table>
+      <thead>
+        <tr>
+          <th bgcolor="#AFF"> 3日前 </th><th>　</th>
+          <th bgcolor="#FF7"> 1日前 </th><th>　</th>
+          <th bgcolor="#F55"> 今日 </th><th>　</th>
+          <th bgcolor="#FBF"> 過ぎています </th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>ToDo名</th>
+        <th>ToDoリスト名</th>
+        <th>期限</th>
+        <th>作成日</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in word_todo %}
+        {% load mytag %}
+        {% if time_between|show_list:forloop.counter0 == 1 %}
+          <tr bgcolor="#FF7">
+        {% elif time_between|show_list:forloop.counter0 == 0 %}
+          <tr bgcolor="#F55">
+        {% elif time_between|show_list:forloop.counter0 < 0 %}
+          <tr bgcolor="#FBF">
+        {% elif time_between|show_list:forloop.counter0 <= 3 %}
+          <tr bgcolor="#AFF">
+        {% else %}
+          <tr>
+        {% endif %}
+        <td><font size=5><a href="{% url 'cms:todo_list' todolist_id=i.todolist.id %}">{{ i.todo_name }}</a></font></td>
+        <td><font size=4>{{ i.todolist }}</font></td>
+        <td><font size=4>{{ i.deadline }}</font></td>
+        <td>{{ i.created_time }}</td>
+      {% endfor %}
+    </tbody>
+  </table>
+  <br><br>
+  <a href="{% url 'cms:todolist_list' %}" class="btn btn-default btn-sm">ToDoリストへ</a>
+
+{% endblock content %}

@@ -1,6 +1,7 @@
 from django.forms import ModelForm
 from cms.models import ToDoList, ToDo
 from django import forms
+# from bootstrap_datepicker.widgets import DatePicker
 
 
 class ToDoListForm(ModelForm):
@@ -21,6 +22,7 @@ class ToDoForm(ModelForm):
         widgets = {
             'todo_name': forms.TextInput(attrs={'placeholder':'ToDo名を入力してください'}),
             'deadline': forms.TextInput(attrs={'placeholder':'(例) 2017-09-21'}),
+            # 'deadline': DatePicker(options={"format": "mm/dd/yyyy","autoclose": True,'placeholder':'(例) 2017-09-21'}),
             'comp': forms.HiddenInput(),
         }
 

@@ -15,4 +15,7 @@ urlpatterns = [
 
     # 検索
     url(r'^Search/$', views.Search, name='search'),
+
+    # 検索
+    url(r'^Sort/$', views.Sort, name='sort'),
 ]

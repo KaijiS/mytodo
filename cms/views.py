@@ -222,10 +222,11 @@ def Comp_change(request, todolist_id, todo_id):
 
 def Search(request):
     """検索"""
-    if request.is_ajax():
-        print("sss")
-    else:
-        print("nnn")
+    # if request.is_ajax(): #ajaxチェック
+    #     print("ok_ajax")
+    # else:
+    #     print("non_ajax")
+
     if request.method == 'GET':
         query = request.GET.get('query') #検索ワード：query
         if query:
@@ -258,3 +259,18 @@ def Search(request):
             return JsonResponse(d)
 
     return render(request, 'cms/Search.html')
+
+
+def Sort(request):
+    word_todo = [i for i in ToDo.objects.filter(comp=False).order_by('deadline')]
+    word_deadline = [i.deadline for i in ToDo.objects.filter(comp=False).order_by('deadline')]
+
+    now = datetime.datetime.now()
+    now_date = datetime.date(now.year, now.month, now.day)
+    time_between = [int((i - now_date).days) for i in word_deadline]
+
+    contexts = {
+        'word_todo':word_todo,
+        'time_between':time_between,
+    }
+    return render(request,'cms/Sort.html',contexts)
