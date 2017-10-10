@@ -268,7 +268,7 @@ def Search(request):
 
 
 def Search_Sim(request):
-    """検索"""
+    """類似語で検索"""
     # if request.is_ajax(): #ajaxチェック
     #     print("ok_ajax")
     # else:
@@ -276,24 +276,23 @@ def Search_Sim(request):
 
     if request.method == 'GET':
 
-        query = request.GET.get('query') #検索ワード：query
+        query = request.GET.get('query') # 検索ワード：query
         if query:
-
             m = MeCab.Tagger('-Owakati')
             wn = cms.word_sim.WordSim()
-            thr = 0.5
+            thr = 0.3 # 類似度（シソーラス距離）の閾値
             sim_todo=[]
+            # 全てのToDoに関して、検索ワードと類似した単語を含んでいればsim_todoに追加
             for tmp in ToDo.objects.all().order_by('-created_time'):
-                word=m.parse(tmp.todo_name) #形態素解析
-                words=[str(i) for i in word.split()] #形態素をリストの要素へ
-                print("words:",words)
+                word=m.parse(tmp.todo_name) # 形態素解析
+                words=[str(i) for i in word.split()] # 形態素をリストの要素へ
                 for i in words:
-                    sim = wn.similarity(i, query)
-                    print("sim:",sim)
+                    sim = wn.similarity(i, query) # 各形態素と検索ワードの類似度
                     if sim != None and sim >= thr:
                         sim_todo.append(tmp)
                         break
 
+            # 上記のによって抽出されたToDoの情報をリスト化
             sim_todo_name = [i.todo_name for i in sim_todo]
             sim_todo_id = [str(i.id) for i in sim_todo]
             sim_todo_todolist = [j.todolist_name for j in (i.todolist for i in sim_todo)]
@@ -302,39 +301,26 @@ def Search_Sim(request):
             sim_todo_created_time= [i.created_time for i in sim_todo]
 
             sim_todolist=[]
+            # 全てのToDoリストに関して、検索ワードと類似した単語を含んでいればsim_todolistに追加
             for tmp in ToDoList.objects.all().annotate(latest_day=Max('todos__created_time')).order_by('-latest_day'):
                 word=m.parse(tmp.todolist_name) #形態素解析
                 words=[str(i) for i in word.split()] #形態素をリストの要素へ
-                print (words)
                 for i in words:
-                    sim = wn.similarity(i, query)
-                    print(sim)
+                    sim = wn.similarity(i, query) # 各形態素と検索ワードの類似度
                     if sim != None and sim >= thr:
                         sim_todolist.append(tmp)
                         break
 
+            # 上記のによって抽出されたToDoリストの情報をリスト化
             sim_todolist_name = [i.todolist_name for i in sim_todolist]
             sim_todolist_id = [str(i.id) for i in sim_todolist]
             sim_todolist_created = []
             for i in sim_todolist_name:
                 for j in ToDoList.objects.filter(todolist_name=i).annotate(latest_day=Max('todos__created_time')):
                     sim_todolist_created += [j.latest_day]
-
-            print(sim_todolist_created)
-
             for i in range(len(sim_todolist_created)):
                 if sim_todolist_created[i] == None:
                     sim_todolist_created[i] = "ToDoがありません"
-
-            for i in sim_todo:
-                print(i.todo_name)
-            print(str(len(sim_todo_name)))
-            print(sim_todo_name)
-            for i in sim_todolist:
-                print(i.todolist_name)
-            print(str(len(sim_todolist_name)))
-            print(sim_todolist_name)
-
 
             d = {
                 'sim_todo_name':sim_todo_name,
@@ -356,6 +342,7 @@ def Search_Sim(request):
 
 
 def Sort(request):
+    """全てのToDoを締め切りが近い順にソート"""
     word_todo = [i for i in ToDo.objects.filter(comp=False).order_by('deadline')]
     word_deadline = [i.deadline for i in ToDo.objects.filter(comp=False).order_by('deadline')]
 
