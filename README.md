@@ -22,7 +22,7 @@ mytodo(プロジェクト名)
 テーブル名:ToDoList(属性:ID,ToDoリスト名)  
 テーブル名:ToDo(属性:ID,ToDoList(外部キー),ToDo名,締切日,作成日,完了/末完了)  
 
-*動作確認*  
+**動作確認**  
 必要ライブラリのインストール  
     $ pip3 install django  
     $ pip3 install numpy  
