@@ -8,7 +8,7 @@
 検索時：jQueryによるAjax
 
 ## 全体の設計・構成
-*構成*  
+*ファイル構成*  
 mytodo(プロジェクト名)  
 　　|-cms(アプリ名)  
 　　|　　|--template(HTMLなど表示周り)  
@@ -22,14 +22,14 @@ mytodo(プロジェクト名)
 テーブル名:ToDoList(属性:ID,ToDoリスト名)  
 テーブル名:ToDo(属性:ID,ToDoList(外部キー),ToDo名,締切日,作成日,完了/末完了)  
 
-*動作確認*  
+*動作確認*
 開発用サーバの起動
 `$ python3 manage.py runserver`  
 アクセス先：http://127.0.0.1:8000/cms/ToDoList/
 
 ## 環境開発のセットアップ手順
 1. python3のインストール
-2. pip3を用いて"numpy"及び"Django"をインストール
+2. pip3を用いてフレームワークの"Django",その他"numpy","nltk"及び"MeCab"をインストール
 3. プロジェクトの作成($ django-admin.py startproject プロジェクト名)
 4. データベースのセットアップ($ python3 manage.py migrate)
 5. スーパーユーザの作成($ python3 manage.py createsuperuser)
