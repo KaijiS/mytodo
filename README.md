@@ -23,13 +23,13 @@ mytodo(プロジェクト名)
 テーブル名:ToDo(属性:ID,ToDoList(外部キー),ToDo名,締切日,作成日,完了/末完了)  
 
 *動作確認*  
-必要ライブラリのインストール
-    $ pip3 install django
-    $ pip3 install numpy
-    $ brew install mecab
-    $ brew install mecab-ipadic
-    $ pip3 install mecab-python3
-    $ pip3 install nltk
+必要ライブラリのインストール  
+    $ pip3 install django  
+    $ pip3 install numpy  
+    $ brew install mecab  
+    $ brew install mecab-ipadic  
+    $ pip3 install mecab-python3  
+    $ pip3 install nltk  
 開発用サーバの起動
 `$ python3 manage.py runserver`  
 アクセス先：http://127.0.0.1:8000/cms/ToDoList/
