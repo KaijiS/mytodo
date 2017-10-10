@@ -9,6 +9,9 @@ from django.db.models import Max,Min,Count
 
 import datetime
 
+import MeCab
+import cms.word_sim
+
 def ToDoList_list(request):
     """ToDoリストの一覧"""
     form = ToDoListForm(request.POST or None)
@@ -228,6 +231,7 @@ def Search(request):
     #     print("non_ajax")
 
     if request.method == 'GET':
+
         query = request.GET.get('query') #検索ワード：query
         if query:
             word_todo = [i.todo_name for i in ToDo.objects.filter(todo_name__icontains=query).order_by('-created_time')] #クエリを含むToDo名をそれに対応するToDoの作成日順にソート
@@ -243,6 +247,7 @@ def Search(request):
                 if word_todolist_created[i] == None:
                     word_todolist_created[i] = "ToDoがありません"
             word_todolist_id = [ str(x) for x in word_todolist_id]
+
             d = {
                 'word_todo':word_todo,
                 'word_todo_id':word_todo_id,
@@ -259,6 +264,95 @@ def Search(request):
             return JsonResponse(d)
 
     return render(request, 'cms/Search.html')
+
+
+
+def Search_Sim(request):
+    """検索"""
+    # if request.is_ajax(): #ajaxチェック
+    #     print("ok_ajax")
+    # else:
+    #     print("non_ajax")
+
+    if request.method == 'GET':
+
+        query = request.GET.get('query') #検索ワード：query
+        if query:
+
+            m = MeCab.Tagger('-Owakati')
+            wn = cms.word_sim.WordSim()
+            thr = 0.5
+            sim_todo=[]
+            for tmp in ToDo.objects.all().order_by('-created_time'):
+                word=m.parse(tmp.todo_name) #形態素解析
+                words=[str(i) for i in word.split()] #形態素をリストの要素へ
+                print("words:",words)
+                for i in words:
+                    sim = wn.similarity(i, query)
+                    print("sim:",sim)
+                    if sim != None and sim >= thr:
+                        sim_todo.append(tmp)
+                        break
+
+            sim_todo_name = [i.todo_name for i in sim_todo]
+            sim_todo_id = [str(i.id) for i in sim_todo]
+            sim_todo_todolist = [j.todolist_name for j in (i.todolist for i in sim_todo)]
+            sim_todo_todolist_id = [str(j.id) for j in (i.todolist for i in sim_todo)]
+            sim_todo_deadline= [i.deadline for i in sim_todo]
+            sim_todo_created_time= [i.created_time for i in sim_todo]
+
+            sim_todolist=[]
+            for tmp in ToDoList.objects.all().annotate(latest_day=Max('todos__created_time')).order_by('-latest_day'):
+                word=m.parse(tmp.todolist_name) #形態素解析
+                words=[str(i) for i in word.split()] #形態素をリストの要素へ
+                print (words)
+                for i in words:
+                    sim = wn.similarity(i, query)
+                    print(sim)
+                    if sim != None and sim >= thr:
+                        sim_todolist.append(tmp)
+                        break
+
+            sim_todolist_name = [i.todolist_name for i in sim_todolist]
+            sim_todolist_id = [str(i.id) for i in sim_todolist]
+            sim_todolist_created = []
+            for i in sim_todolist_name:
+                for j in ToDoList.objects.filter(todolist_name=i).annotate(latest_day=Max('todos__created_time')):
+                    sim_todolist_created += [j.latest_day]
+
+            print(sim_todolist_created)
+
+            for i in range(len(sim_todolist_created)):
+                if sim_todolist_created[i] == None:
+                    sim_todolist_created[i] = "ToDoがありません"
+
+            for i in sim_todo:
+                print(i.todo_name)
+            print(str(len(sim_todo_name)))
+            print(sim_todo_name)
+            for i in sim_todolist:
+                print(i.todolist_name)
+            print(str(len(sim_todolist_name)))
+            print(sim_todolist_name)
+
+
+            d = {
+                'sim_todo_name':sim_todo_name,
+                'sim_todo_id':sim_todo_id,
+                'sim_todo_todolist':sim_todo_todolist,
+                'sim_todo_todolist_id':sim_todo_todolist_id,
+                'sim_todo_deadline':sim_todo_deadline,
+                'sim_todo_created_time':sim_todo_created_time,
+                'sim_todolist_name':sim_todolist_name,
+                'sim_todolist_id':sim_todolist_id,
+                'sim_todolist_created':sim_todolist_created,
+                'num_sim_todolist':str(len(sim_todolist_name)),
+                'num_sim_todo':str(len(sim_todo_name)),
+            }
+            return JsonResponse(d)
+
+    return render(request, 'cms/Search_Sim.html')
+
 
 
 def Sort(request):

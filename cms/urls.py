@@ -15,7 +15,8 @@ urlpatterns = [
 
     # 検索
     url(r'^Search/$', views.Search, name='search'),
+    url(r'^Search_Sim/$', views.Search_Sim, name='search_sim'),
 
-    # 検索
+    # 締め切りが近いToDo表示
     url(r'^Sort/$', views.Sort, name='sort'),
 ]

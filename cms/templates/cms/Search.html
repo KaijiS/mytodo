@@ -5,37 +5,26 @@
 {% block extrahead %}
 <style>
 .bk{
-  background: url("{% static 'image/search.png' %}") center center / contain no-repeat fixed;}
+  background: url("{% static 'image/search.png' %}") center center / contain no-repeat fixed;
+}
 .bkRGBA{
   height: 100%;
-  background: rgba(255,255,255,0.6);
+  background: rgba(255,255,255,0.8);
 }
 </style>
 {% load bootstrap %}
 {% endblock %}
 
-{% block content %}
-  {% block body %}
+{% block body %}
   <body class="bk">
     <div class="bkRGBA">
-  {% endblock %}
+{% endblock %}
+{% block content %}
       <form id="getform" action="" method="get">
         <input id="query" type="text" size="60" name="query">
         <input type="submit" class="btn btn-primary" value="検索">
       </form>
-      <div id="result">
-        <table class="table table-bordered" id=tb-todo>
-          <thead>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-        <table class="table table-bordered" id=tb-tl>
-          <thead>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
+      <div id="result" height=100%>
       </div>
     </div>
   </div>
@@ -80,7 +69,7 @@
                             tmp_created_time = created_time
                           }
                       });
-                      $('#result').append('<div style="padding: 20px; margin-bottom: 10px; border: 1px solid #333333;"><font size="5"><a href=../ToDo/'+tmp_todolist_id+'>'+todo_name +'</a></font><br><div style="float:left">リスト：<font size="4">'+tmp_todolist_name+'</font></div><div align="right">期限：<font size="4">'+tmp_deadline+'</font></div><div align="right">作成日：'+tmp_created_time+'</div></div>')
+                      $('#result').append('<div style="padding: 20px; margin-bottom: 10px; border: 1px solid #333333; background: rgba(255,255,255,0.6);"><font size="5"><a href=../ToDo/'+tmp_todolist_id+'>'+todo_name +'</a></font><br><div style="float:left">リスト：<font size="4">'+tmp_todolist_name+'</font></div><div align="right">期限：<font size="4">'+tmp_deadline+'</font></div><div align="right">作成日：'+tmp_created_time+'</div></div>')
                   });
 
                 }
@@ -102,7 +91,7 @@
                           tmp_todolist_created = todolist_created
                         }
                       });
-                      $('#result').append('<div style="padding: 20px; margin-bottom: 10px; border: 1px solid #333333;"><font size="5"><a href=../ToDo/'+tmp_todolist_id+'>'+ todolist_name +'</a></font><br><div align="right">作成日：'+tmp_todolist_created+'</div></div>')
+                      $('#result').append('<div style="padding: 20px; margin-bottom: 10px; border: 1px solid #333333; background: rgba(255,255,255,0.6);"><font size="5"><a href=../ToDo/'+tmp_todolist_id+'>'+ todolist_name +'</a></font><br><div align="right">作成日：'+tmp_todolist_created+'</div></div>')
                       // $('#result').append('<div style="padding: 20px; margin-bottom: 10px; border: 1px solid #333333;"><font size="5"><a href=.\"\{% url \'cms:todo_list\' todolist_id='+todolist_id+' %\}\">'+ todolist_name +'</a></font><br><div align="right">作成日：'+tmp_todolist_created+'</div></div>')
                   });
                 }
