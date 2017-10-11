@@ -5,10 +5,11 @@
 フレームワーク:Django  
 データベース:SQLite(Djangoの初期設定)  
 
-検索時：jQueryによるAjax
+検索時：jQueryによるAjax  
+類似語による検索時：MeCabによる形態素解析、WordNetを用いた単語間の類似度(シソーラス距離)
 
 ## 全体の設計・構成
-*ファイル構成*  
+**ファイル構成**   
 mytodo(プロジェクト名)  
 　　|-cms(アプリ名)  
 　　|　　|--template(HTMLなど表示周り)  
@@ -18,18 +19,25 @@ mytodo(プロジェクト名)
 　　|  
 　　|-static(BootstrapやjQuery,背景画像)  
 
-*データベース設計*  
+**データベース設計**  
 テーブル名:ToDoList(属性:ID,ToDoリスト名)  
 テーブル名:ToDo(属性:ID,ToDoList(外部キー),ToDo名,締切日,作成日,完了/末完了)  
 
 **動作確認**  
-必要ライブラリのインストール  
-    $ pip3 install django  
-    $ pip3 install numpy  
-    $ brew install mecab  
-    $ brew install mecab-ipadic  
-    $ pip3 install mecab-python3  
-    $ pip3 install nltk  
+確認環境
+* macOS Sierra バージョン 10.12.6  
+* Python3.6.2
+* 以下の必要ライブラリ
+
+必要ライブラリのインストール方法  
+    `$ pip3 install django`  
+    `$ pip3 install numpy`  
+    `$ brew install mecab` (macOSの方法)  
+    `$ brew install mecab-ipadic` (macOSの方法)  
+    `$ pip3 install mecab-python3`  
+    `$ pip3 install nltk`  
+    `$ pip3 install django-bootstrap-form`  
+
 開発用サーバの起動
 `$ python3 manage.py runserver`  
 アクセス先：http://127.0.0.1:8000/cms/ToDoList/
