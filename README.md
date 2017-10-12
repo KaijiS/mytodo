@@ -45,7 +45,7 @@ mytodo(プロジェクト名)
 
 ## 環境開発のセットアップ手順
 1. python3のインストール
-2. pip3を用いてフレームワークの"Django"及び,その他"numpy","nltk","MeCab"及び"django-bootstrap-form"をインストール
+2. pip3を用いてフレームワークの"Django"及び,その他"numpy","nltk","MeCab"及び"django-bootstrap-form"を上記のようにインストール
 3. プロジェクトの作成  
 `$ django-admin.py startproject プロジェクト名`
 4. データベースのセットアップ  
