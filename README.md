@@ -1,6 +1,6 @@
 # mytodo
 プログラム課題
-## 使用した技術要素
+## 1. 使用した技術要素
 言語:Python3  
 フレームワーク:Django  
 データベース:SQLite(Djangoの初期設定)  
@@ -8,7 +8,7 @@
 検索時：jQueryによるAjax  
 類似語による検索時：MeCabによる形態素解析、WordNetを用いた単語間の類似度(シソーラス距離)の算出
 
-## 全体の設計・構成
+## 2. 全体の設計・構成
 **ファイル構成**   
 mytodo(プロジェクト名)  
 　　|-cms(アプリ名)  
@@ -51,9 +51,9 @@ mytodo(プロジェクト名)
 `$ python3 manage.py runserver`  
 アクセス先：http://127.0.0.1:8000/cms/ToDoList/
 
-## 環境開発のセットアップ手順
+## 3. 環境開発のセットアップ手順
 1. Python3のインストール
-2. pip3を用いてフレームワークの"Django"及び,その他"numpy","nltk","MeCab"及び"django-bootstrap-form"を上記のようにインストール
+2. pip3を用いてフレームワークの"Django"及び,その他"numpy","nltk","MeCab"及び"django-bootstrap-form"を上記(2.全体の設計・構成-動作確認")のようにインストール
 3. プロジェクトの作成  
 `$ django-admin.py startproject プロジェクト名`
 4. データベースのセットアップ  
